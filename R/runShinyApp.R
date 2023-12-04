@@ -38,6 +38,12 @@ runShinyApp <- function(){
 
   con = check_environment()
 
+  load("data/calculated.rda")
+  load("data/conditions.rda")
+  load("data/countries.rda")
+  load("data/sponsors.rda")
+  load("data/studies.rda")
+
   if (length(dbListTables(con)) == 0) {
     stop("Problem reading from connection.")
   }
