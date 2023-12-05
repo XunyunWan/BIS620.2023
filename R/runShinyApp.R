@@ -35,6 +35,11 @@
 runShinyApp <- function(){
 
   max_num_studies=1000
+  data("studies")
+  data("calculated")
+  data("conditions")
+  data("countries")
+  data("sponsors")
 
   conditions <- conditions %>%
     group_by(nct_id) %>%
@@ -48,11 +53,17 @@ runShinyApp <- function(){
     mutate(sponsor_name = name) %>%
     select(-name)
 
+  calculated <- calculated %>%
+    group_by(nct_id) %>%
+    summarize(min_age = minimum_age_num,
+              max_age = maximum_age_num)
+
   # Join the datasets
   studies <- studies %>%
     left_join(conditions, by = "nct_id") %>%
     left_join(countries, by = "nct_id") %>%
-    left_join(sponsors, by = "nct_id")
+    left_join(sponsors, by = "nct_id") %>%
+    left_join(calculated, by = "nct_id")
 
   # Define UI for application that draws a histogram
   ui <- fluidPage(
@@ -73,6 +84,8 @@ runShinyApp <- function(){
                       "Unknown" = "Unknown"),multiple = TRUE),
 
         dateRangeInput("dates", label = h3("Date Range")),
+        sliderInput("slider", label = h3("Age Range"), min = 0,
+                    max = 100, value = c(0, 100)),
         checkboxGroupInput("sponsor", label = h3("Lead or Collaborator"),
                            choices = list("lead" = "lead", "collaborator" = "collaborator"),
         ),
@@ -95,7 +108,7 @@ runShinyApp <- function(){
           tabPanel("Countries", plotOutput("countries_plot")),
           tabPanel("Status", plotOutput("status_plot"))
         ),
-       dataTableOutput("trial_table")
+        dataTableOutput("trial_table")
       )
     )
   )
@@ -122,6 +135,11 @@ runShinyApp <- function(){
       input_end <- input$dates[2]
       if(!is.null(input$dates)){
         ret = ret |> filter(start_date <= input_start, completion_date >= input_end)
+      }
+      age_start <- input$slider[1]
+      age_end <- input$slider[2]
+      if(!is.null(input$slider2)){
+        ret = ret |> filter(min_age <= age_end | max_age >= age_start)
       }
       if(!is.null(input$sponsor)){
         ret = ret |> filter(lead_or_collaborator %in% !!input$sponsor)
