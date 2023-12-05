@@ -33,11 +33,6 @@ devtools::install_github("XunyunWan/bis620.2023")
 ```
 ## Feature  
 
-### Age range  
-This feature displays and categorizes the age of participants. By adjusting the age
-range, users of this app can view experiments for the target age range. It provides
-insights into the safety and effectiveness of treatments across age groups.  
-
 ### Date range  
 This feature captures the trial start and end dates. Users of this app can filter studies for the time period of interest by adjusting the date range to help track trends and ongoing trial progress.  
 
@@ -63,10 +58,13 @@ This feature provides a clear view of trial progress and results, so clinical tr
 
 This is a basic example which we use in shinyApp to demonstrate different phases:
 
-```{r, example, message=FALSE,warning =FALSE,echo = FALSE}
+```{r, example, message=FALSE,warning =FALSE}
 library(bis620.2023)
 
 bis620.2023:::plot_phase_histogram(studies)
 
 ```
 
+## Test Coverage
+Clike the link below to see details of test coverage:
+https://app.codecov.io/github/XunyunWan/bis620.2023/tree/main/R
