@@ -8,5 +8,6 @@
 
 library(testthat)
 library(bis620.2023)
+library(dplyr)
 
 test_check("bis620.2023")

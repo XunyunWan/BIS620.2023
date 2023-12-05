@@ -2,26 +2,27 @@
 % Please edit documentation in R/query_kwds.R
 \name{query_kwds}
 \alias{query_kwds}
-\title{Query keywords from a database table.}
+\title{query_kwds}
 \usage{
-query_kwds(d, kwds, column, ignore_case = TRUE, match_all = FALSE)
+query_kwds(tbl, kwds, column, ignore_case = TRUE, match_all = FALSE)
 }
 \arguments{
-\item{d}{the database table.}
+\item{tbl}{A dataset to filter.}
 
-\item{kwds}{the keywords to look for.}
+\item{kwds}{Keywords to search for.}
 
-\item{column}{the column to look for the keywords in.}
+\item{column}{The name of the column in the dataset to perform the search.}
 
-\item{ignore_case}{should the case be ignored when searching for a keyword? (default TRUE)}
+\item{ignore_case}{(Optional) A logical value indicating whether the search should be case-insensitive. Default is TRUE.}
 
-\item{match_all}{should we look for values that match all of the keywords
-(intersection) or any of the keywords (union)? (default FALSE; union).}
+\item{match_all}{(Optional) A logical value indicating whether all keywords must match (AND) or any keyword can match (OR). Default is FALSE.}
 }
 \value{
-Filtered database table.
+A filtered dataset based on the constructed SQL query.
 }
 \description{
-Searches for rows in a database table where the specified column contains
-any or all of the provided keywords.
+This function construct dplyr query for filtering a dataset based on keyword search criteria applied to a specific column.
+}
+\details{
+Construct  dplyr query for Filtering
 }

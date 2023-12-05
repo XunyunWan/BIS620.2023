@@ -4,7 +4,8 @@
 #'
 #' @format A data frame with 809607 rows and 4 variables, including:
 #' \describe{
-#'   \item{name}{Name of a adverse event}
-#'   ... and so on ...
+#'   \item{nct_id}{xxx}
+#'   \item{name}{xxx}
+#'   \item{downcase_name}{}
 #' }
 "conditions"

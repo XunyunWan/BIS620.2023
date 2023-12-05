@@ -23,8 +23,7 @@ Imports:
   rnaturalearthdata,
   DBI,
   stringr,
-  duckdb,
-  devtools
+  duckdb
 Suggests: 
     knitr,
     rmarkdown,

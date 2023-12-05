@@ -34,43 +34,25 @@
 #'
 runShinyApp <- function(){
 
-  max_num_studies <- 1000
+  max_num_studies=1000
 
-  con = check_environment()
-
-  load("data/calculated.rda")
-  load("data/conditions.rda")
-  load("data/countries.rda")
-  load("data/sponsors.rda")
-  load("data/studies.rda")
-
-  if (length(dbListTables(con)) == 0) {
-    stop("Problem reading from connection.")
-  }
-
-  studies = tbl(con, "studies")
-  sponsors = tbl(con, "sponsors")
-  conditions = tbl(con, "conditions")
-  countries = tbl(con, "countries")
-  calculated = tbl(con, "calculated_values")
-
-  conditions = conditions |>
+  conditions <- conditions %>%
     group_by(nct_id) %>%
     summarize(condition_name = str_flatten(downcase_name, ", "))
-  countries = countries |>
+
+  countries <- countries %>%
     group_by(nct_id) %>%
     summarize(country = str_flatten(name, ", "))
+
   sponsors <- sponsors %>%
-    mutate(sponsor_name = sql("name")) %>%
+    mutate(sponsor_name = name) %>%
     select(-name)
-  calculated = calculated %>%
-    group_by(nct_id) %>%
-    summarize(min_age = min(minimum_age_num, na.rm = TRUE),
-              max_age = max(maximum_age_num, na.rm = TRUE))
-  studies = studies |> left_join(conditions, by = "nct_id")
-  studies = studies |> left_join(countries, by = "nct_id")
-  studies = studies |> left_join(sponsors, by = "nct_id")
-  studies = studies |> left_join(calculated, by = "nct_id")
+
+  # Join the datasets
+  studies <- studies %>%
+    left_join(conditions, by = "nct_id") %>%
+    left_join(countries, by = "nct_id") %>%
+    left_join(sponsors, by = "nct_id")
 
   # Define UI for application that draws a histogram
   ui <- fluidPage(
@@ -91,8 +73,6 @@ runShinyApp <- function(){
                       "Unknown" = "Unknown"),multiple = TRUE),
 
         dateRangeInput("dates", label = h3("Date Range")),
-        sliderInput("slider", label = h3("Age Range"), min = 0,
-                    max = 100, value = c(0, 100)),
         checkboxGroupInput("sponsor", label = h3("Lead or Collaborator"),
                            choices = list("lead" = "lead", "collaborator" = "collaborator"),
         ),
@@ -143,11 +123,6 @@ runShinyApp <- function(){
       if(!is.null(input$dates)){
         ret = ret |> filter(start_date <= input_start, completion_date >= input_end)
       }
-      age_start <- input$slider[1]
-      age_end <- input$slider[2]
-      if(!is.null(input$slider2)){
-        ret = ret |> filter(min_age <= age_end | max_age >= age_start)
-      }
       if(!is.null(input$sponsor)){
         ret = ret |> filter(lead_or_collaborator %in% !!input$sponsor)
       }
@@ -156,12 +131,11 @@ runShinyApp <- function(){
       }
 
       ret |>
-        head(max_num_studies) |>
-        collect()
+        head(max_num_studies)
     })
 
     output$phase_plot = renderPlot({
-        plot_phase_histogram(get_studies())
+      plot_phase_histogram(get_studies())
     })
 
     output$concurrent_plot = renderPlot({

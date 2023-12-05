@@ -1,26 +1,27 @@
-#' Query keywords from a database table.
+#' Construct  dplyr query for Filtering
 #'
-#' @description Searches for rows in a database table where the specified column contains
-#' any or all of the provided keywords.
-#' @param d the database table.
-#' @param kwds the keywords to look for.
-#' @param column the column to look for the keywords in.
-#' @param ignore_case should the case be ignored when searching for a keyword? (default TRUE)
-#' @param match_all should we look for values that match all of the keywords
-#' (intersection) or any of the keywords (union)? (default FALSE; union).
-#' @return Filtered database table.
-query_kwds <- function(d, kwds, column, ignore_case = TRUE, match_all = FALSE) {
-  kwds = kwds[kwds != ""]
-  kwds = paste0("%", kwds, "%") |>
-    gsub("'", "''", x = _)
+#' @title query_kwds
+#' @description This function construct dplyr query for filtering a dataset based on keyword search criteria applied to a specific column.
+#' @param tbl A dataset to filter.
+#' @param kwds Keywords to search for.
+#' @param column The name of the column in the dataset to perform the search.
+#' @param ignore_case (Optional) A logical value indicating whether the search should be case-insensitive. Default is TRUE.
+#' @param match_all (Optional) A logical value indicating whether all keywords must match (AND) or any keyword can match (OR). Default is FALSE.
+#' @importFrom dplyr filter sql
+#' @return A filtered dataset based on the constructed SQL query.
+
+query_kwds <- function(tbl, kwds, column, ignore_case = TRUE, match_all = FALSE) {
+  # Prepare keywords for matching
+  kwds <- paste0(".*", kwds, ".*")
+
+  # Case-insensitive matching if specified
   if (ignore_case) {
-    like <- " ilike "
-  } else {
-    like <- " like "
+    kwds <- paste0("(?i)", kwds)
   }
-  query = paste(
-    paste0(column, like, "'", kwds, "'"),
-    collapse = ifelse(match_all, " AND ", " OR ")
-  )
-  filter(d, sql(query))
+
+  # Construct the regular expression
+  regex <- paste(kwds, collapse = ifelse(match_all, "|", ".*|.*"))
+
+  # Use dplyr::filter to filter the table based on the constructed regex
+  dplyr::filter(tbl, grepl(regex, tbl[[column]], perl = TRUE))
 }
