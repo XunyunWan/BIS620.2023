@@ -33,59 +33,38 @@
 #' @export
 #'
 runShinyApp <- function(){
-  
-  max_num_studies=1000
-  data("studies")
-  data("calculated")
-  data("conditions")
-  data("countries")
-  data("sponsors")
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> 5a557e1fde9701cbcdafe8d0c4c5b4c29e5cb5f3
+  max_num_studies=1000
+
   conditions <- conditions %>%
     group_by(nct_id) %>%
     summarize(condition_name = str_flatten(downcase_name, ", "))
-  
+
   countries <- countries %>%
     group_by(nct_id) %>%
     summarize(country = str_flatten(name, ", "))
-  
+
   sponsors <- sponsors %>%
     mutate(sponsor_name = name) %>%
     select(-name)
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> 5a557e1fde9701cbcdafe8d0c4c5b4c29e5cb5f3
   calculated <- calculated %>%
     group_by(nct_id) %>%
     summarize(min_age = minimum_age_num,
               max_age = maximum_age_num)
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> 5a557e1fde9701cbcdafe8d0c4c5b4c29e5cb5f3
   # Join the datasets
   studies <- studies %>%
     left_join(conditions, by = "nct_id") %>%
     left_join(countries, by = "nct_id") %>%
     left_join(sponsors, by = "nct_id") %>%
     left_join(calculated, by = "nct_id")
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> 5a557e1fde9701cbcdafe8d0c4c5b4c29e5cb5f3
   # Define UI for application that draws a histogram
   ui <- fluidPage(
     # Application title
     titlePanel("Clinical Trials Query"),
-    
+
     sidebarLayout(
       sidebarPanel(
         textInput("brief_title_kw", "Brief title keywords"),
@@ -98,7 +77,7 @@ runShinyApp <- function(){
                       "Other" = "OTHER",
                       "Other gov" = "OTHER_GOV",
                       "Unknown" = "Unknown"),multiple = TRUE),
-        
+
         dateRangeInput("dates", label = h3("Date Range")),
         sliderInput("slider", label = h3("Age Range"), min = 0,
                     max = 100, value = c(0, 100)),
@@ -112,8 +91,8 @@ runShinyApp <- function(){
                                           "Observational [Patient Registry]" = "Observational [Patient Registry]"),
         )
       ),
-      
-      
+
+
       # Show a plot of the generated distribution
       mainPanel(
         tabsetPanel(
@@ -128,12 +107,12 @@ runShinyApp <- function(){
       )
     )
   )
-  
-  
-  
+
+
+
   # Define server logic required to draw a histogram
   server <- function(input, output) {
-    
+
     get_studies = reactive({
       if (input$brief_title_kw != "") {
         si = input$brief_title_kw |>
@@ -163,35 +142,35 @@ runShinyApp <- function(){
       if(!is.null(input$study_type)){
         ret = ret |> filter(study_type %in% !!input$study_type)
       }
-      
+
       ret |>
         head(max_num_studies)
     })
-    
+
     output$phase_plot = renderPlot({
       plot_phase_histogram(get_studies())
     })
-    
+
     output$concurrent_plot = renderPlot({
       get_studies() |>
         plot_concurrent_studies()
     })
-    
+
     output$conditions_plot = renderPlot({
       get_studies() |>
         plot_conditions_histogram()
     })
-    
+
     output$countries_plot = renderPlot({
       get_studies() |>
         plot_countries_map()
     })
-    
+
     output$status_plot = renderPlot({
       get_studies() |>
         plot_status_piechart()
     })
-    
+
     output$trial_table = renderDataTable({
       get_studies() |>
         head(max_num_studies) |>
@@ -199,10 +178,10 @@ runShinyApp <- function(){
         rename(`NCT ID` = nct_id, `Brief Title` = brief_title,
                `Start Date` = start_date, `Completion Date` = completion_date)
     })
-    
+
   }
-  
-  
+
+
   # Run the application
   shinyApp(ui = ui, server = server)
 }
