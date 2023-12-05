@@ -5,10 +5,10 @@
 \alias{countries}
 \title{Countries Dataset}
 \format{
-A data frame with 649581 rows and 4 variables, including:
+A data frame with 649581 rows and 2 variables, including:
 \describe{
-\item{nct_id}{xxx}
-\item{name}{xxx}
+\item{nct_id}{The unique identifier assigned to each clinical study registered on ClinicalTrials.gov}
+\item{name}{Country name}
 }
 }
 \usage{

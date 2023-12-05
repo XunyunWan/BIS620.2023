@@ -5,12 +5,12 @@
 \alias{sponsors}
 \title{Sponsors Dataset}
 \format{
-A data frame with 750282 rows and 5 variables, including:
+A data frame with 750282 rows and 4 variables, including:
 \describe{
-\item{nct_id}{xxx}
-\item{agency_class}{xxx}
-\item{lead_or_collaborator}{xxx}
-\item{name}{xxx}
+\item{nct_id}{The unique identifier assigned to each clinical study registered on ClinicalTrials.gov}
+\item{agency_class}{Class of the sponsor}
+\item{lead_or_collaborator}{Whether the sponsor is leading or collaborating}
+\item{name}{Name of the sponsor}
 }
 }
 \usage{
