@@ -21,5 +21,6 @@ utils::globalVariables(c("X", "Y", "Z", "Acceleration",
   "calculated", "nct_id", "condition_name", "country", "sponsor_name",
   "min_age", "max_age", "start_date", "completion_date", "overall_status",
   "phase", "percentage", "value", "downcase_name", "name", "lead_or_collaborator",
-  "maximum_age_num","minimum_age_num"
+  "maximum_age_num","minimum_age_num", "AGE", "ATRT", "BMMTR1", "BMMTR15", "BMMTR2", "BMMTR3",
+  "B_HEIGHT", "B_WEIGHT", "DTH", "DTHDY", "KRAS", "RACE", "SEX", "SUBJID", "age_group", "median", "sd"
 ))
