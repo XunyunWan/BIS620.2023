@@ -14,6 +14,81 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+## Team Member
+
+Xunyun Wan (xw479)
+
+Bernice Feng (bf395)
+
+Shuqi Lin (sl2946)
+
+
+```{r}
+devtools::load_all()
+data("NCT00364013")
 library(bis620.2023)
 ```
+## Description of The Data
+We will be using the panitumumab clinical trial data, whose purpose was to determine the treatment effect of panitumumab in combination with FOLFOX compared to FOLFOX alone as first line therapy for metastatic colorectal cancer. Our study aims to investigate the efficacy of panitumumab treatment across different subgroups of the population, such as age, sex, race and KRAS gene status. Understanding how these variables influence the drug's effectiveness is crucial for enhancing the accuracy of predictions regarding its therapeutic outcomes.  
+
+## Motivation
+Colorectal cancer, like many other types of cancer, responds differently to treatment based on various factors. These factors include genetic differences, age, gender, and overall health. This variation in response means that the effectiveness of treatments can vary widely among different patients.
+Our research focuses on examining how effective the drug panitumumab is for various groups of patients. These groups are categorized by their age, sex, race, and whether they have a specific genetic feature. By doing this, we aim to better understand how panitumumab works for diverse patients, which could help in providing more effective, personalized treatment plans.  
+
+## Scientific Research Question
+Does the efficacy of panitumumab treatment for colorectal cancer differ among patient subgroups defined by age, sex, race and KRAS status?  
+
+### Descriptive Analysis
+Our Descriptive Analysis function offers a comprehensive overview of participant baseline characteristics in clinical studies.  
+
+#### Sex
+By executing the describe_sex function with a specific dataset, such as NCT00364013, users can obtain a detailed breakdown of the distribution of participants' sex, including counts and proportions.
+```{r}
+describe_sex(NCT00364013)
+```
+
+#### Age
+By running the describe_age function with a particular dataset, such as NCT00364013, users can access a detailed summary of the age distribution among study participants. 
+```{r}
+describe_age(NCT00364013)
+```
+
+#### BMI
+Uutilizing the describe_bmi function with the dataset would yield a comprehensive analysis of the Body Mass Index (BMI) of the participants. 
+```{r}
+describe_bmi(NCT00364013)
+```
+
+### Survival Analysis
+The Survival Analysis feature is designed to evaluate the impact of sex on the survival outcomes of participants in clinical trials.
+#### Sex
+Using the sex function, researchers can generate survival curves, which are graphical representations that display the proportion of patients surviving over time within the study. These curves are stratified by sex, allowing for a clear comparison of survival between female and male participants under different treatment arms.
+```{r}
+sex(NCT00364013)
+```
+
+#### Age
+Utilizing the age function, analysts can produce age-stratified survival curves. These plots illustrate the survival probabilities over time, differentiated by age groups within the clinical trial data. Such age-specific survival analyses are crucial for understanding how age affects the efficacy of treatments.
+```{r}
+age(NCT00364013)
+```
+
+#### BMI
+The bmi function allows for the creation of BMI-stratified survival curves. Patients BMI were turned into categorization of BMI classes (underweight, normal weight, overweight, and obese). These curves reveal the survival rates over time across different BMI categories, aiding in the examination of how body weight and composition may influence the success of medical interventions. 
+```{r}
+bmi(NCT00364013)
+```
+
+#### Cox
+The cox() function is used for displaying the results of Cox regression, which assesses how various factors, like age, sex, race, BMI, and genetics, might affect the survival prospects of patients in clinical trials. The output includes estimates that can tell the users whether these factors increase or decrease survival risks, with the p-values indicating the likelihood that these findings are reliable. This analysis is key in medical research for identifying critical factors that may impact patient outcomes.
+```{r}
+cox(NCT00364013)
+```
+### Discussion
+The output of the funtions suggests that certain factors like the KRAS gene status and BMI significantly influence patient survival. A wild-type KRAS gene is associated with better survival, while higher BMI also shows a protective effect. Age shows a trend where increased age might be associated with higher risk, but this is not statistically conclusive. Sex and the combination treatment with Panitumumab do not show a significant effect in this analysis. The model overall is significant, meaning these variables together are useful in predicting patient survival outcomes.
+
+### Summary
+This package provides tools for performing survival analysis, allowing researchers to understand how different variables influence survival time in clinical trial data. The Cox regression function, specifically, helps in identifying which factors may be associated with better or worse survival outcomes, which is crucial for developing personalized treatment plans and understanding disease progression.
+
+
+
